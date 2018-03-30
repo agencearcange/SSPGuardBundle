@@ -11,7 +11,7 @@
 
 namespace Sgomez\Bundle\SSPGuardBundle\Controller;
 
-
+use Sgomez\Bundle\SSPGuardBundle\SimpleSAMLphp\AuthSourceRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,6 +19,14 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class ConnectController extends Controller
 {
+
+    protected $registry;
+
+    public function __construct(AuthSourceRegistry $registry)
+    {
+        $this->registry = $registry;
+    }
+
     public function connectAction(Request $request, $authSource)
     {
         $user = $this->getUser();
@@ -30,8 +38,7 @@ class ConnectController extends Controller
             return $this->redirectToRoute('homepage');
         }
 
-        $authSourceRegistry = $this->get('ssp.guard.registry');
-        $url = $authSourceRegistry->getAuthSource($authSource)->getLoginUrl();
+        $url = $this->registry->getAuthSource($authSource)->getLoginUrl();
 
         return $this->redirect($url);
     }

@@ -59,16 +59,6 @@ abstract class SSPGuardAuthenticator extends AbstractGuardAuthenticator
      */
     public function getCredentials(Request $request)
     {
-        $match = $this->router->match($request->getPathInfo());
-
-        if (
-            'ssp_guard_check' !== $match['_route']
-            || $this->authSourceId !== $match['authSource']
-        ) {
-            // skip authentication unless we're on this route
-            return;
-        }
-
         $this->authSource = $this->authSourceRegistry->getAuthSource($this->authSourceId);
 
         return $this->authSource->getCredentials();
@@ -104,6 +94,26 @@ abstract class SSPGuardAuthenticator extends AbstractGuardAuthenticator
     protected function getTargetPath(Request $request, $providerKey)
     {
         return $request->getSession()->get('_security.'.$providerKey.'.target_path');
+    }
+
+    /**
+     * Does the authenticator support the given Request?
+     *
+     * If this returns false, the authenticator will be skipped.
+     *
+     * @param Request $request
+     *
+     * @return bool
+     */
+    public function supports(Request $request)
+    {
+        $match = $this->router->match($request->getPathInfo());
+
+        if ('ssp_guard_check' !== $match['_route'] || $this->authSourceId !== $match['authSource']) {
+            // skip authentication unless we're on this route
+            return false;
+        }
+        return true;
     }
 
     /**

@@ -83,6 +83,8 @@ class SSPGuardExtension extends Extension
         );
         $authSourceDefinition->setFile($this->autoloadPath);
 
+        $authSourceDefinition->setPublic(true);
+
         $authSourceDefinition->setFactory([
             new Reference('ssp.guard.auth_source_factory'),
             'createAuthSource',
