@@ -15,6 +15,7 @@ use Sgomez\Bundle\SSPGuardBundle\SimpleSAMLphp\AuthSourceRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class ConnectController extends Controller
@@ -22,9 +23,12 @@ class ConnectController extends Controller
 
     protected $registry;
 
-    public function __construct(AuthSourceRegistry $registry)
+    protected $urlGenerator;
+
+    public function __construct(AuthSourceRegistry $registry, UrlGeneratorInterface $urlGenerator)
     {
         $this->registry = $registry;
+        $this->urlGenerator = $urlGenerator;
     }
 
     public function connectAction(Request $request, $authSource)
@@ -48,8 +52,10 @@ class ConnectController extends Controller
         throw new \RuntimeException('You must configure the check path to be handled by the firewall using form_login in your security firewall configuration.');
     }
 
-    public function logoutAction()
+    public function logoutAction(Request $request, $authSource)
     {
-        throw new \RuntimeException('You must activate the logout in your security firewall configuration.');
+        $authSource = $this->registry->getAuthSource($authSource);
+        $url = $authSource->getLogoutUrl($this->urlGenerator->generate($authSource->getLogoutPath(), [], UrlGeneratorInterface::ABSOLUTE_URL));
+        return $this->redirect($url);
     }
 }

@@ -66,6 +66,11 @@ class SSPAuthSource
         return $this->auth->getLoginURL($this->getRedirectUri());
     }
 
+    public function getLogoutUrl($route)
+    {
+        return $this->auth->getLogoutURL($route);
+    }
+
     public function getUsername()
     {
         if ($this->isAuthenticated()) {
@@ -95,5 +100,10 @@ class SSPAuthSource
     public function getUserId()
     {
         return $this->options['user_id'];
+    }
+
+    public function getLogoutPath()
+    {
+        return $this->options['logout_path'];
     }
 }

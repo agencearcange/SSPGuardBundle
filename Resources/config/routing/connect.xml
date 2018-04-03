@@ -8,6 +8,10 @@
         <default key="_controller">SSPGuardBundle:Connect:connect</default>
     </route>
 
+    <route id="ssp_guard_logout" path="/logout/ssp_guard/{authSource}">
+        <default key="_controller">SSPGuardBundle:Connect:logout</default>
+    </route>
+
     <route id="ssp_guard_check" path="/check/ssp_guard/{authSource}">
         <default key="_controller">SSPGuardBundle:Connect:check</default>
     </route>

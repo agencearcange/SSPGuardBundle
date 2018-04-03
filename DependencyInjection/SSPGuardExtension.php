@@ -104,6 +104,7 @@ class SSPGuardExtension extends Extension
         $optionsNode
             ->scalarNode('title')->isRequired()->end()
             ->scalarNode('user_id')->isRequired()->end()
+            ->scalarNode('logout_path')->isRequired()->end()
         ;
     }
 
