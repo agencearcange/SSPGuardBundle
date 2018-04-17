@@ -15,6 +15,11 @@
             <argument />
         </service>
 
+        <service id="ssp.guard.controller"  class="Sgomez\Bundle\SSPGuardBundle\Controller\ConnectController">
+            <argument key="$registry" type="service" id="ssp.guard.registry"/>
+            <argument key="$urlGenerator" type="service" id="Symfony\Component\Routing\Generator\UrlGeneratorInterface"/>
+        </service>
+
     </services>
 
 </container>
